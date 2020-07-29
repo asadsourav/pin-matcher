@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pin Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="pin-generator half-width">
+                    <input id="generated-pin" class="form-control text-center" type="text">
+                    <button id="pin-button" class="generate-btn">Generate Pin</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="input-section half-width">
+                    <input id="display" class="form-control text-center" type="text">
+                    <div class="numbers">
+                        <div class="calc-body">
+                            <div class="calc-button-row">
+                              <div id="b7" class="button" onclick="displayNumbers(document.getElementById('b7').innerText)">7</div>
+                              <div id="b8" class="button" onclick="displayNumbers(document.getElementById('b8').innerText)">8</div>
+                              <div id="b9" class="button" onclick="displayNumbers(document.getElementById('b9').innerText)">9</div>
+                            </div>
+                            <div class="calc-button-row">
+                              <div id="b4" class="button" onclick="displayNumbers(document.getElementById('b4').innerText)">4</div>
+                              <div id="b5" class="button" onclick="displayNumbers(document.getElementById('b5').innerText)">5</div>
+                              <div id="b6" class="button" onclick="displayNumbers(document.getElementById('b6').innerText)">6</div>
+                            </div>
+                            <div class="calc-button-row">
+                              <div id="b1" class="button" onclick="displayNumbers(document.getElementById('b1').innerText)">1</div>
+                              <div id="b2" class="button" onclick="displayNumbers(document.getElementById('b2').innerText)">2</div>
+                              <div id="b3" class="button" onclick="displayNumbers(document.getElementById('b3').innerText)">3</div>
+                            </div>
+                            <div class="calc-button-row">
+                                <div id="back" class="button" onclick="document.getElementById('display').value=document.getElementById('display').value.slice(0,-1)"><</div>
+                                <div id="b0" class="button" onclick="displayNumbers(document.getElementById('b0').innerText)">0</div>
+                                <div id="cancel" class="button" onclick="document.getElementById('display').value=''">C</div>
+                            </div>
+                            <div>
+                                <button id="submit-pin" type="submit" class="submit-btn" >Submit</button>
+                                <p class="action-left"> <span id="trial-remaining">3</span> try left</p>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="notify-section">
+            <p id="try-again" class="notify">❌ Pin Didn't Match, Please try again</p>
+            <p id="matched" class="notify">✅ Pin Matched... Secret door is opening for you</p>
+        </div>
+    </div>
+    <script>
+        // pin generating part 
+        document.getElementById('pin-button').addEventListener('click', function(){
+            randomNumber = Math.random()*10000;
+            fourDigitPin = Math.ceil(randomNumber)
+            document.getElementById('generated-pin').value = fourDigitPin;
+            document.getElementById('matched').style.display = 'none';
+            document.getElementById('try-again').style.display = 'none';
+        })
+
+        //number  button event handler part 
+        function displayNumbers(clickedButton){
+		document.getElementById('display').value=document.getElementById('display').value+clickedButton;
+		
+	}
+
+    // submit button event handler 
+    document.getElementById('submit-pin').addEventListener('click', function(){
+        if(document.getElementById('display').value == fourDigitPin){
+            document.getElementById('matched').style.display = 'block';
+        }
+        else{
+            document.getElementById('try-again').style.display = 'block';
+            var trial = document.getElementById('trial-remaining').innerText;
+            var trialNumber = parseInt(trial);
+            trialNumber = trialNumber-1;
+            if(trialNumber>0){
+                document.getElementById('trial-remaining').innerText = trialNumber;
+            }
+            else{
+                document.getElementById('trial-remaining').innerText =0;
+                document.getElementById('submit-pin').disabled = true;
+            }
+        }
+        document.getElementById('generated-pin').value ='';
+        document.getElementById('display').value = '';
+    })
+    </script>
+</body>
+</html>
